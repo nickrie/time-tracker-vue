@@ -1,28 +1,39 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <Tasks v-bind:tasks="tasks" />
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import Tasks from './components/Tasks';
 
 export default {
   name: 'app',
   components: {
-    HelloWorld
+    Tasks
+  },
+  data() {
+    return {
+      tasks: [
+        {
+          id: 1,
+          name: 'my first task',
+          last: null,
+          started: null
+        },
+        {
+          id: 2,
+          name: 'my second task',
+          last: null,
+          started: null
+        }
+      ]
+    }
   }
 }
 </script>
 
 <style>
 #app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
 }
 </style>
