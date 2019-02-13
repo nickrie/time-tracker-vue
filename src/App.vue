@@ -18,6 +18,7 @@
     />
     <Tasks
       v-bind:tasks="tasks"
+      v-bind:editTaskId="editTaskId"
       v-on:toggle-task="toggleTask"
       v-on:edit-task="editTask"
       v-on:delete-task="deleteTask"
