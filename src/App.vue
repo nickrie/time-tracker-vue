@@ -16,7 +16,12 @@
       v-on:delete-task="deleteTask"
       :validateTaskInputs="validateTaskInputs"
     />
-    <Tasks v-bind:tasks="tasks" v-on:edit-task="editTask" v-on:delete-task="deleteTask"/>
+    <Tasks
+      v-bind:tasks="tasks"
+      v-on:toggle-task="toggleTask"
+      v-on:edit-task="editTask"
+      v-on:delete-task="deleteTask"
+    />
     <Footer/>
   </div>
 </template>
@@ -27,6 +32,8 @@ import AddTask from "./components/AddTask";
 import EditTask from "./components/EditTask";
 import Tasks from "./components/Tasks";
 import Footer from "./components/layout/Footer";
+
+import Moment from "moment";
 
 export default {
   name: "app",
@@ -118,50 +125,44 @@ export default {
       }
     },
 
-    // Start a task timer
-    /*
-    startTask(task) {
-      const { firestore } = this.props;
+    // Toggle a task
+    toggleTask(task) {
+      if (task.started === null) {
+        this.startTask(task);
+      } else {
+        this.stopRunningTasks();
+      }
+    },
 
+    // Start a task timer
+    startTask(task) {
       // Stop any running tasks first
       this.stopRunningTasks();
 
       // Build the update object
       const started = new Date();
       const taskUpdate = {
-        started
+        id: task.id,
+        name: task.name,
+        logged: task.logged,
+        started,
+        last: task.last
       };
 
-      // Update firestore
-      firestore
-        .update({ collection: 'tasks', doc: task.id }, taskUpdate)
-        .then(() => {
-          // Mark this task id as started for the action icon
-          this.setState({
-            startedTaskId: task.id
-          });
-          // Clear startedTaskId after one second
-          setTimeout(() => {
-            this.setState({
-              startedTaskId: null
-            });
-          }, 1000);
-        });
+      // Update the task
+      this.updateTask(taskUpdate);
 
       return false;
     },
-    */
 
     // Stop all running task timers
     //  NOTE: although the app limits one running app at a time,
     //    updating a record at firestore could cause more than one
     //    to be running, so assume more than one could be running.
-    /*
     stopRunningTasks() {
-      const { firestore } = this.props;
       let started, taskUpdate;
 
-      this.props.tasks.forEach(task => {
+      this.tasks.forEach(task => {
         if (task.started !== null) {
           // Stop the task
           started = null;
@@ -169,8 +170,8 @@ export default {
           // Calculate new logged time
           //  Don't update logged time or last date if it was active for less than 5 seconds
           const a = Moment(new Date());
-          const b = Moment(task.started.toDate());
-          const seconds = a.diff(b, 'seconds');
+          const b = Moment(task.started);
+          const seconds = a.diff(b, "seconds");
           const minutes = seconds < 5 ? 0 : Math.ceil(seconds / 60);
 
           if (minutes > 0) {
@@ -178,35 +179,27 @@ export default {
             const logged = parseInt(task.logged) + minutes;
             const last = new Date();
             taskUpdate = {
+              id: task.id,
+              name: task.name,
+              logged,
               started,
-              last,
-              logged
+              last
             };
           } else {
             // No time was logged, so just stop the task
             taskUpdate = {
-              started
+              id: task.id,
+              name: task.name,
+              logged: task.logged,
+              started,
+              last: task.last
             };
           }
-          // Update firestore
-          firestore
-            .update({ collection: 'tasks', doc: task.id }, taskUpdate)
-            .then(() => {
-              // Mark this task id as stopped for the action icon
-              this.setState({
-                stoppedTaskId: task.id
-              });
-              // Clear stoppedTaskId after one second
-              setTimeout(() => {
-                this.setState({
-                  stoppedTaskId: null
-                });
-              }, 1000);
-            });
+          // Update the task
+          this.updateTask(taskUpdate);
         }
       });
     },
-    */
 
     // Validate task form input values
     validateTaskInputs(id, name, hours, minutes) {

@@ -29,7 +29,7 @@ export default {
   props: ["task"],
   methods: {
     toggleTask() {
-      this.task.started = this.task.started === null ? new Date() : null;
+      this.$emit("toggle-task", this.task);
     }
   }
 };
