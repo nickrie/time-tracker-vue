@@ -9,11 +9,20 @@
         <i class="fab fa-github fa-2x"/>
       </a>
     </div>
+    <div v-if="formHidden" class="ml-3">
+      <a href="#!" @click="showForm" class="text-light">
+        <i class="fas fa-arrow-down fa-2x"/>
+      </a>
+    </div>
   </nav>
 </template>
 
 <script>
 export default {
-  name: "Navbar"
+  name: "Navbar",
+  props: {
+    formHidden: Boolean,
+    showForm: { type: Function }
+  }
 };
 </script>

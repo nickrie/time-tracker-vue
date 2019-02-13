@@ -10,7 +10,7 @@
               type="text"
               placeholder="Task Name"
               autocomplete="off"
-              value
+              v-model="name"
             >
           </div>
           <div class="form-group col-md-3 col-lg-2">
@@ -21,7 +21,7 @@
                 type="number"
                 placeholder="Hours"
                 autocomplete="off"
-                value
+                v-model="hours"
               >
               <div class="input-group-append">
                 <div class="input-group-text">h</div>
@@ -36,7 +36,7 @@
                 type="number"
                 placeholder="Minutes"
                 autocomplete="off"
-                value
+                v-model="minutes"
               >
               <div class="input-group-append">
                 <div class="input-group-text">m</div>
@@ -61,15 +61,61 @@
 </template>
 
 <script>
+import uuid from "uuid";
+
 export default {
   name: "AddTask",
+  data() {
+    return {
+      name: "",
+      hours: 0,
+      minutes: 0
+    };
+  },
+  props: {
+    hideForm: { type: Function },
+    validateTaskInputs: { type: Function }
+  },
   methods: {
     handleSubmit(e) {
       e.preventDefault();
-      alert("submit");
-    },
-    hideForm() {
-      alert("hide form");
+
+      // Validate the inputs
+      const check = this.validateTaskInputs(
+        null,
+        this.name,
+        this.hours,
+        this.minutes
+      );
+
+      // If there was an error display it and prevent adding the task
+      if (check.error) {
+        alert(check.msg);
+        return;
+      }
+
+      // Otherwise build the object to add the task
+      let hours = this.hours;
+      hours = hours === null || hours === "" ? 0 : parseInt(hours);
+      let minutes = this.minutes;
+      minutes = minutes === null || minutes === "" ? 0 : parseInt(minutes);
+      const logged = parseInt(hours) * 60 + parseInt(minutes);
+
+      const taskAdd = {
+        id: uuid.v4(),
+        name: this.name,
+        logged,
+        started: null,
+        last: null
+      };
+
+      this.$emit("add-task", taskAdd);
+
+      // Clear the form
+
+      this.name = "";
+      this.hours = 0;
+      this.minutes = 0;
     }
   }
 };
