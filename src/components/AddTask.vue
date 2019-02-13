@@ -1,5 +1,5 @@
 <template>
-  <div class="card bg-light container mt-2">
+  <div class="container card bg-light mt-2">
     <div class="card-body">
       <form class="ml-auto my-0" @submit="handleSubmit">
         <div class="row">

@@ -19,7 +19,11 @@
       <div class="col col-2"></div>
     </div>
     <div v-bind:key="task.id" v-for="task in tasks">
-      <Task v-bind:task="task" v-on:delete-task="$emit('delete-task', task.id)"/>
+      <Task
+        v-bind:task="task"
+        v-on:edit-task="$emit('edit-task', task.id)"
+        v-on:delete-task="$emit('delete-task', task.id)"
+      />
     </div>
   </div>
 </template>

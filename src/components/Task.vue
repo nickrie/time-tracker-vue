@@ -9,20 +9,23 @@
     <div class="col col-2 text-right">{{task.logged}}</div>
     <div class="col col-2">{{task.last}}</div>
     <div class="col col-2">
-      <button
-        type="button"
-        class="btn btn-outline-dark btn-delete"
-        @click="$emit('delete-task', task.id)"
-      >
-        <i class="fas fa-trash"/>
-      </button>
+      <TaskButtons
+        v-bind:task="task"
+        v-on:edit-task="$emit('edit-task', task.id)"
+        v-on:delete-task="$emit('delete-task', task.id)"
+      />
     </div>
   </div>
 </template>
 
 <script>
+import TaskButtons from "./TaskButtons";
+
 export default {
   name: "Task",
+  components: {
+    TaskButtons
+  },
   props: ["task"],
   methods: {
     toggleTask() {
