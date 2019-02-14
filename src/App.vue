@@ -171,8 +171,8 @@ export default {
 
     // Stop all running task timers
     //  NOTE: although the app limits one running app at a time,
-    //    updating a record at firestore could cause more than one
-    //    to be running, so assume more than one could be running.
+    //    since the user is free to edit LocalStorage assume more 
+    //    than one could be running.
     stopRunningTasks() {
       let started, taskUpdate;
 

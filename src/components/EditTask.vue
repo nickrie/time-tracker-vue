@@ -144,7 +144,7 @@ export default {
         return;
       }
 
-      // Otherwise build the object to update firestore
+      // Otherwise build the object to update LS
 
       hours = hours === null || hours === "" ? 0 : parseInt(hours);
       minutes = minutes === null || minutes === "" ? 0 : parseInt(minutes);
