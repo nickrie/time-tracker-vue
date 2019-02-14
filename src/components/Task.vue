@@ -12,8 +12,12 @@
       class="col col4"
       v-bind:class="{'bg-primary text-light':editTaskId === task.id}"
     >{{task.name}}</div>
-    <div class="col col-2 text-right">{{task.logged}}</div>
-    <div class="col col-2">{{task.started === null ? task.last : 'ACTIVE'}}</div>
+    <div class="col col-2 text-right">
+      <LoggedTime v-bind:minutes="task.logged" v-bind:activeMinutes="activeMinutes"/>
+    </div>
+    <div class="col col-2">
+      <LastActive v-bind:active="isActive" v-bind:last="task.last" v-bind:now="nowDate"/>
+    </div>
     <div class="col col-2">
       <TaskButtons
         v-bind:task="task"
@@ -25,14 +29,37 @@
 </template>
 
 <script>
+import LoggedTime from "./LoggedTime";
+import LastActive from "./LastActive";
 import TaskButtons from "./TaskButtons";
+
+import { displayActiveMinutes } from "./../helpers/display";
 
 export default {
   name: "Task",
   components: {
+    LoggedTime,
+    LastActive,
     TaskButtons
   },
   props: ["task", "editTaskId"],
+  created() {
+    this.activeMinutes = displayActiveMinutes(this.task);
+    this.isActive = this.task.started !== null;
+    this.nowDate = new Date();
+  },
+  beforeUpdate() {
+    this.activeMinutes = displayActiveMinutes(this.task);
+    this.isActive = this.task.started !== null;
+    this.nowDate = new Date();
+  },
+  data() {
+    return {
+      activeMinutes: 0,
+      isActive: false,
+      nowDate: new Date()
+    };
+  },
   methods: {
     toggleTask(e) {
       // Bail if they clicked the edit/delete button/icon
