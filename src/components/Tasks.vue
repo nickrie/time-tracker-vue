@@ -1,33 +1,46 @@
 <template>
-  <div id="task-list" class="container mt-3 mb-5">
-    <div class="row text-secondary" id="row-header">
-      <div class="col col-1"></div>
-      <div class="col col-4">
-        <h5>Task Name</h5>
+  <div>
+    <div v-if="tasks.length" id="task-list" class="container mt-3 mb-5">
+      <div class="row text-secondary" id="row-header">
+        <div class="col col-1"></div>
+        <div class="col col-4">
+          <h5>Task Name</h5>
+        </div>
+        <div class="col col-3 text-right">
+          <h5>
+            <span class="d-none d-lg-inline">Time</span>Logged
+          </h5>
+        </div>
+        <div class="col col-2">
+          <h5>
+            Last
+            <span class="d-none d-lg-inline">Active</span>
+          </h5>
+        </div>
+        <div class="col col-2"></div>
       </div>
-      <div class="col col-3 text-right">
-        <h5>
-          <span class="d-none d-lg-inline">Time</span>Logged
-        </h5>
+      <div v-bind:key="task.id" v-for="task in tasks">
+        <Task
+          v-bind:task="task"
+          v-bind:editTaskId="editTaskId"
+          v-bind:startedTaskId="startedTaskId"
+          v-bind:stoppedTaskId="stoppedTaskId"
+          v-on:toggle-task="$emit('toggle-task', task)"
+          v-on:edit-task="$emit('edit-task', task.id)"
+          v-on:delete-task="$emit('delete-task', task.id)"
+        />
       </div>
-      <div class="col col-2">
-        <h5>
-          Last
-          <span class="d-none d-lg-inline">Active</span>
-        </h5>
-      </div>
-      <div class="col col-2"></div>
     </div>
-    <div v-bind:key="task.id" v-for="task in tasks">
-      <Task
-        v-bind:task="task"
-        v-bind:editTaskId="editTaskId"
-        v-bind:startedTaskId="startedTaskId"
-        v-bind:stoppedTaskId="stoppedTaskId"
-        v-on:toggle-task="$emit('toggle-task', task)"
-        v-on:edit-task="$emit('edit-task', task.id)"
-        v-on:delete-task="$emit('delete-task', task.id)"
-      />
+    <div v-if="!tasks.length" class="container text-center text-secondary my-5">
+      <h1 class="display-4">Your task list is empty.</h1>
+      <p class="lead">Add a task above to get started!</p>
+      <p class="text-success">New tasks are started automatically.</p>
+      <p class="text-warning">Click a task to start/stop the timer.</p>
+      <p class="text-secondary">
+        Times are always rounded up to the nearest minute.
+        <br>A task must be active for at least 5 seconds for time to be
+        logged.
+      </p>
     </div>
   </div>
 </template>
@@ -40,7 +53,7 @@ export default {
   components: {
     Task
   },
-  props: ["tasks", "editTaskId","startedTaskId","stoppedTaskId"]
+  props: ["tasks", "editTaskId", "startedTaskId", "stoppedTaskId"]
 };
 </script>
 
