@@ -63,7 +63,7 @@
               @click="handleSubmitClick"
               class="btn btn-success mr-1 my-2 my-sm-0"
             >Submit Changes</button>
-            <button @click="$emit('cancel-edit')" class="btn btn-warning mr-1 my-2 my-sm-0">Cancel</button>
+            <button @click="$emit('cancel-edit')" type="button" class="btn btn-warning mr-1 my-2 my-sm-0">Cancel</button>
             <button
               @click="$emit('delete-task', task.id)"
               class="btn btn-danger mr-1 my-2 my-sm-0"
