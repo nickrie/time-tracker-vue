@@ -16,7 +16,7 @@
       <LoggedTime v-bind:minutes="task.logged" v-bind:activeMinutes="activeMinutes"/>
     </div>
     <div class="col col-2">
-      <LastActive v-bind:active="isActive" v-bind:last="task.last" v-bind:now="nowDate"/>
+      <LastActive v-bind:isActive="isActive" v-bind:last="task.last" v-bind:now="nowDate"/>
     </div>
     <div class="col col-2">
       <TaskButtons
@@ -47,11 +47,16 @@ export default {
     this.activeMinutes = displayActiveMinutes(this.task);
     this.isActive = this.task.started !== null;
     this.nowDate = new Date();
+    // Update our Time Logged and Last Active values every 5 seconds
+    this.refreshTimer = setInterval(this.updateTimeValues, 5000);
   },
   beforeUpdate() {
     this.activeMinutes = displayActiveMinutes(this.task);
     this.isActive = this.task.started !== null;
     this.nowDate = new Date();
+  },
+  beforeDestroy() {
+    clearInterval(this.refreshTimer);
   },
   data() {
     return {
@@ -75,6 +80,13 @@ export default {
 
       // Otherwise toggle the task
       this.$emit("toggle-task", this.task);
+    },
+
+    // Updates state values used for calculating Time Logged and Last Active
+    updateTimeValues() {
+      const { task } = this.$props;
+      this.activeMinutes = displayActiveMinutes(task);
+      this.nowDate = new Date();
     }
   }
 };

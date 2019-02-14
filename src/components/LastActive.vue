@@ -1,7 +1,7 @@
 <template>
   <div>
-    <span class="d-none d-lg-block">{{long}}</span>
-    <span class="d-block d-lg-none">{{short}}</span>
+    <span class="d-none d-lg-block">{{getLong()}}</span>
+    <span class="d-block d-lg-none">{{getShort()}}</span>
   </div>
 </template>
 
@@ -12,41 +12,28 @@ import { displayMinutes } from "./../helpers/display";
 
 export default {
   name: "LastActive",
-  created() {
-    this.isActive = this.$props.active;
-    this.calc();
-  },
-  data() {
-    return {
-      isActive: false,
-      long: null,
-      short: null
-    };
-  },
-  props: ["active", "last", "now"],
-  watch: {
-    active: function(newVal) {
-      this.isActive = newVal;
-      this.calc();
-    }
-  },
+  props: ["isActive", "last", "now"],
   methods: {
-    calc() {
-      const { last, now } = this.$props;
-      const isActive = this.isActive;
+    getLong() {
+      const { isActive, last, now } = this.$props;
 
       if (isActive) {
-        this.long = "ACTIVE";
-        this.short = "ACTIVE";
+        return "ACTIVE";
       } else if (last !== null) {
-        // get short elapsed time str
+        return moment(last).from(now);
+      }
+    },
+    getShort() {
+      const { isActive, last, now } = this.$props;
+
+      if (isActive) {
+        return "ACTIVE";
+      } else if (last !== null) {
         let a = moment(now);
         let b = moment(last);
         let seconds = a.diff(b, "seconds");
         let minutes = Math.ceil(seconds / 60);
-        this.short = displayMinutes(minutes);
-        // get long elapsed time str
-        this.long = moment(last).from(now);
+        return displayMinutes(minutes);
       }
     }
   }
