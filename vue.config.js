@@ -1,3 +1,3 @@
 module.exports = {
-  publicPath: '/time-tracker-vue/'
+  publicPath: '/time-tracker-vue'
 };

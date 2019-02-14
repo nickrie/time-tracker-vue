@@ -50,10 +50,10 @@ export default {
 
   created() {
     // Get Tasks from LS
-    if (window.localStorage.getItem("tasks") === null) {
+    if (window.localStorage.getItem("tasks-v3") === null) {
       this.tasks = [];
     } else {
-      this.tasks = JSON.parse(window.localStorage.getItem("tasks"));
+      this.tasks = JSON.parse(window.localStorage.getItem("tasks-v3"));
     }
   },
 
@@ -94,7 +94,7 @@ export default {
       // Add the task
       this.tasks = [task, ...this.tasks];
       // Update LS
-      window.localStorage.setItem("tasks", JSON.stringify(this.tasks));
+      window.localStorage.setItem("tasks-v3", JSON.stringify(this.tasks));
       // Start the task
       this.toggleTask(task);
     },
@@ -116,7 +116,7 @@ export default {
           ...this.tasks.slice(idx + 1)
         ];
         // Update LS
-        window.localStorage.setItem("tasks", JSON.stringify(this.tasks));
+        window.localStorage.setItem("tasks-v3", JSON.stringify(this.tasks));
       }
     },
 
@@ -126,7 +126,7 @@ export default {
         // Remove the task
         this.tasks = this.tasks.filter(task => task.id != id);
         // Update LS
-        window.localStorage.setItem("tasks", JSON.stringify(this.tasks));
+        window.localStorage.setItem("tasks-v3", JSON.stringify(this.tasks));
         // If we deleted from the Edit Form, hide it
         this.cancelEdit();
       }
