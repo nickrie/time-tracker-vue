@@ -56,14 +56,18 @@
             class="col-md-5 col-lg-4 text-light order-md-2"
           >
             NOTE: This does not include the current active time of
-            displayMinutes({{this.activeMinutes}}).
+            {{displayMinutes(this.activeMinutes)}}.
           </div>
           <div class="col-md-7 col-lg-8 order-md-1">
             <button
               @click="handleSubmitClick"
               class="btn btn-success mr-1 my-2 my-sm-0"
             >Submit Changes</button>
-            <button @click="$emit('cancel-edit')" type="button" class="btn btn-warning mr-1 my-2 my-sm-0">Cancel</button>
+            <button
+              @click="$emit('cancel-edit')"
+              type="button"
+              class="btn btn-warning mr-1 my-2 my-sm-0"
+            >Cancel</button>
             <button
               @click="$emit('delete-task', task.id)"
               class="btn btn-danger mr-1 my-2 my-sm-0"
@@ -76,6 +80,8 @@
 </template>
 
 <script>
+import { displayActiveMinutes, displayMinutes } from "./../helpers/display";
+
 export default {
   name: "EditTask",
   created() {
@@ -87,8 +93,14 @@ export default {
         this.name = task.name;
         this.hours = Math.floor(task.logged / 60);
         this.minutes = task.logged % 60;
+        this.updateTimeValues();
       }
     });
+    // Update the activeMinutes value every 5 seconds
+    this.refreshTimer = setInterval(this.updateTimeValues, 5000);
+  },
+  beforeDestroy() {
+    clearInterval(this.refreshTimer);
   },
   data() {
     return {
@@ -106,13 +118,11 @@ export default {
     validateTaskInputs: { type: Function }
   },
   methods: {
-    // Update the activeMinutes state for the edit screen message indicating
-    //  that the logged time does not include active time
-    /*
-    updateActiveMinutes() {
-      // TODO
+    displayActiveMinutes,
+    displayMinutes,
+    updateTimeValues() {
+      this.activeMinutes = this.displayActiveMinutes(this.task);
     },
-    */
 
     // Prevent the form from submitting on enter
     handleSubmit(e) {
