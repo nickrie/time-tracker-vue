@@ -95,6 +95,8 @@ export default {
       this.tasks = [task, ...this.tasks];
       // Update LS
       window.localStorage.setItem("tasks", JSON.stringify(this.tasks));
+      // Start the task
+      this.toggleTask(task);
     },
 
     // Update a task

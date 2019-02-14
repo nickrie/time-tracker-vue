@@ -3,7 +3,8 @@
     class="row row-task border-top p-2 align-items-center"
     v-bind:class="{
       'bg-success':task.started !== null, 
-      'bg-primary text-light':editTaskId === task.id && task.started === null 
+      'bg-primary text-light':editTaskId === task.id && task.started === null,
+      'bg-danger':stoppedTaskId === task.id
     }"
     @click="toggleTask"
   >
@@ -29,7 +30,7 @@
     <div class="col col-2">
       <LastActive v-bind:isActive="isActive" v-bind:last="task.last" v-bind:now="nowDate"/>
     </div>
-    <div class="col col-2">
+    <div class="col col-2 text-right">
       <TaskButtons
         v-bind:task="task"
         v-bind:disabled="editTaskId !== null"
@@ -88,6 +89,13 @@ export default {
         e.target.classList.contains("fa-trash")
       ) {
         return;
+      }
+      // Prevent the user from stopping a task that is being edited
+      else if (this.editTaskId === this.task.id && this.task.started !== null) {
+        alert(
+          "Sorry, you must complete editing this task before you can stop it."
+        );
+        return false;
       }
 
       // Otherwise toggle the task
