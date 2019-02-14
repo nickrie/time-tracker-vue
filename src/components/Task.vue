@@ -8,8 +8,16 @@
     @click="toggleTask"
   >
     <div class="col col-1">
-      <i v-if="isActive" class="hover-icon fas fa-stop"></i>
-      <i v-if="!isActive" class="hover-icon fas fa-play"></i>
+      <i
+        v-if="isActive && task.id !== startedTaskId && task.id !== stoppedTaskId"
+        class="hover-icon fas fa-stop"
+      ></i>
+      <i
+        v-if="!isActive && task.id !== startedTaskId && task.id !== stoppedTaskId"
+        class="hover-icon fas fa-play"
+      ></i>
+      <i v-if="task.id === startedTaskId" class="fas fa-rocket"></i>
+      <i v-if="task.id === stoppedTaskId" class="fas fa-hand-paper"></i>
     </div>
     <div
       class="col col4"
@@ -46,7 +54,7 @@ export default {
     LastActive,
     TaskButtons
   },
-  props: ["task", "editTaskId"],
+  props: ["task", "editTaskId", "startedTaskId", "stoppedTaskId"],
   created() {
     this.activeMinutes = displayActiveMinutes(this.task);
     this.isActive = this.task.started !== null;

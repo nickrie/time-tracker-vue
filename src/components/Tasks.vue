@@ -22,6 +22,8 @@
       <Task
         v-bind:task="task"
         v-bind:editTaskId="editTaskId"
+        v-bind:startedTaskId="startedTaskId"
+        v-bind:stoppedTaskId="stoppedTaskId"
         v-on:toggle-task="$emit('toggle-task', task)"
         v-on:edit-task="$emit('edit-task', task.id)"
         v-on:delete-task="$emit('delete-task', task.id)"
@@ -38,7 +40,7 @@ export default {
   components: {
     Task
   },
-  props: ["tasks", "editTaskId"]
+  props: ["tasks", "editTaskId","startedTaskId","stoppedTaskId"]
 };
 </script>
 

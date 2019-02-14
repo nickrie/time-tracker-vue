@@ -19,6 +19,8 @@
     <Tasks
       v-bind:tasks="tasks"
       v-bind:editTaskId="editTaskId"
+      v-bind:startedTaskId="startedTaskId"
+      v-bind:stoppedTaskId="stoppedTaskId"
       v-on:toggle-task="toggleTask"
       v-on:edit-task="editTask"
       v-on:delete-task="deleteTask"
@@ -59,6 +61,8 @@ export default {
     return {
       formHidden: false,
       editTaskId: null,
+      startedTaskId: null,
+      stoppedTaskId: null,
       tasks: []
     };
   },
@@ -153,6 +157,13 @@ export default {
       // Update the task
       this.updateTask(taskUpdate);
 
+      // Mark this task id as started for the action icon
+      this.startedTaskId = task.id;
+      // Clear startedTaskId after one second
+      setTimeout(() => {
+        this.startedTaskId = null;
+      }, 1000);
+
       return false;
     },
 
@@ -196,8 +207,16 @@ export default {
               last: task.last
             };
           }
+
           // Update the task
           this.updateTask(taskUpdate);
+
+          // Mark this task id as stopped for the action icon
+          this.stoppedTaskId = task.id;
+          // Clear startedTaskId after one second
+          setTimeout(() => {
+            this.stoppedTaskId = null;
+          }, 1000);
         }
       });
     },
