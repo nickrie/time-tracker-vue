@@ -35,11 +35,6 @@
 <script>
 export default {
   name: "TaskButtons",
-  props: ["task"],
-  data() {
-    return {
-      disabled: false
-    };
-  }
+  props: ["task", "disabled"]
 };
 </script>

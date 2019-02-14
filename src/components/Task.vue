@@ -7,7 +7,10 @@
     }"
     @click="toggleTask"
   >
-    <div class="col col-1"></div>
+    <div class="col col-1">
+      <i v-if="isActive" class="hover-icon fas fa-stop"></i>
+      <i v-if="!isActive" class="hover-icon fas fa-play"></i>
+    </div>
     <div
       class="col col4"
       v-bind:class="{'bg-primary text-light':editTaskId === task.id}"
@@ -21,6 +24,7 @@
     <div class="col col-2">
       <TaskButtons
         v-bind:task="task"
+        v-bind:disabled="editTaskId !== null"
         v-on:edit-task="$emit('edit-task', task.id)"
         v-on:delete-task="$emit('delete-task', task.id)"
       />
